@@ -59,6 +59,8 @@ Content parseContent(Object jsonObject) {
           _ => null,
         },
         parts.map(_parsePart).toList()),
+    // Handle streaming response that might only contain role
+    {'role': final String role} => Content(role, []),
     _ => throw unhandledFormat('Content', jsonObject),
   };
 }
@@ -77,8 +79,8 @@ Part _parsePart(Object? jsonObject) {
       'functionResponse': {'name': String _, 'response': Map<String, Object?> _}
     } =>
       throw UnimplementedError('FunctionResponse part not yet supported'),
-    {'inlineData': {'mimeType': String _, 'data': String _}} =>
-      throw UnimplementedError('inlineData content part not yet supported'),
+    {'inlineData': {'mimeType': final String mimeType, 'data': final String data}} =>
+      DataPart(mimeType, base64Decode(data)),
     {
       'executableCode': {
         'language': final String language,

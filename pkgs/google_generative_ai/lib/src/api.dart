@@ -521,6 +521,13 @@ final class GenerationConfig {
   ///   a schema; currently this is limited to `application/json`.
   final Schema? responseSchema;
 
+  /// The modalities that should be included in the response.
+  ///
+  /// Supported values:
+  /// - `text`: Text output.
+  /// - `image`: Image output.
+  final List<String>? responseModalities;
+
   GenerationConfig({
     this.candidateCount,
     this.stopSequences = const [],
@@ -530,6 +537,7 @@ final class GenerationConfig {
     this.topK,
     this.responseMimeType,
     this.responseSchema,
+    this.responseModalities,
   });
 
   Map<String, Object?> toJson() => {
@@ -545,6 +553,8 @@ final class GenerationConfig {
           'responseMimeType': responseMimeType,
         if (responseSchema case final responseSchema?)
           'responseSchema': responseSchema,
+        if (responseModalities case final responseModalities?)
+          'responseModalities': responseModalities,
       };
 }
 
